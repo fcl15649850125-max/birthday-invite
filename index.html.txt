@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赵苏淇三周岁生日邀请函 🎈</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fff5f5; /* 更加柔和的奶油粉 */
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 40px 25px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 182, 193, 0.3);
+            max-width: 450px;
+            width: 90%;
+            margin: 20px;
+            animation: slideUp 1.2s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 顶部装饰小气球动画 */
+        .container::before {
+            content: '🎈';
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #ff6b6b;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #f7a072;
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .photo-frame {
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: breathe 4s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .poem {
+            color: #884d4d;
+            font-size: 15px;
+            line-height: 1.8;
+            margin: 20px 0;
+            padding: 15px;
+            background: #fffafa;
+            border-radius: 15px;
+            border-left: 4px solid #ffb6b9;
+        }
+
+        .info-box {
+            text-align: left;
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #555;
+            font-size: 15px;
+            line-height: 2;
+        }
+
+        .info-item b {
+            color: #ff6b6b;
+            margin-right: 8px;
+        }
+
+        #music-btn {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        #music-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>✨ 宝贝三周岁生日邀请 ✨</h1>
+        <div class="subtitle">三岁一程 · 岁岁欢喜</div>
+        
+        <div class="photo-frame">
+            <img src="photo.jpg" alt="赵苏淇的照片" class="photo">
+        </div>
+        
+        <div class="poem">
+            家有小女，喜迎三周岁生辰<br>
+            感恩一路相伴，承蒙万般宠爱<br>
+            备薄宴，邀亲友<br>
+            共赴一场温暖的生日之约<br>
+            见证成长，岁岁安康。
+        </div>
+
+        <div class="info-box">
+            <div class="info-item"><b>主角：</b> 赵苏淇</div>
+            <div class="info-item"><b>时间：</b> 2026年5月6日 (农历三月二十)</div>
+            <div class="info-item"><b>地点：</b> 壶关碧水云天大酒店二楼宴会厅</div>
+            <div class="info-item"><b>举办人：</b> 赵世飞、李志娟</div>
+        </div>
+
+        <audio id="bgMusic" loop>
+            <source src="music.mp3" type="audio/mpeg">
+        </audio>
+        
+        <br>
+        <button id="music-btn" onclick="toggleMusic()">🎵 点击开启音乐与温馨邀请</button>
+    </div>
+
+    <script>
+        var myMusic = document.getElementById("bgMusic");
+        var btn = document.getElementById("music-btn");
+        var isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                myMusic.pause();
+                btn.innerHTML = "🎵 音乐已暂停 (点击播放)";
+            } else {
+                myMusic.play();
+                btn.innerHTML = "🎶 音乐播放中 (点击暂停)";
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
+
+</body>
+</html>
