@@ -8,7 +8,7 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #fff5f5; /* 更加柔和的奶油粉 */
+            background-color: #fff5f5;
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
             display: flex;
             justify-content: center;
@@ -30,7 +30,6 @@
             overflow: hidden;
         }
 
-        /* 顶部装饰小气球动画 */
         .container::before {
             content: '🎈';
             position: absolute;
@@ -70,13 +69,16 @@
             border-radius: 20px;
             margin-bottom: 20px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            background-color: #fff0f0; /* 图片切换时的底色 */
         }
 
         .photo {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            /* 保留了呼吸动画，同时增加了透明度渐变效果 */
             animation: breathe 4s infinite ease-in-out;
+            transition: opacity 0.8s ease-in-out; 
         }
 
         @keyframes breathe {
@@ -134,7 +136,7 @@
         <div class="subtitle">三岁一程 · 岁岁欢喜</div>
         
         <div class="photo-frame">
-            <img src="photo.jpg" alt="赵苏淇的照片" class="photo">
+            <img src="photo1.jpg" alt="赵苏淇的照片" class="photo" id="slide-photo">
         </div>
         
         <div class="poem">
@@ -161,6 +163,7 @@
     </div>
 
     <script>
+        // --- 音乐控制代码 ---
         var myMusic = document.getElementById("bgMusic");
         var btn = document.getElementById("music-btn");
         var isPlaying = false;
@@ -175,6 +178,25 @@
             }
             isPlaying = !isPlaying;
         }
+
+        // --- 照片自动轮播代码 ---
+        // 如果你有更多照片，只需要在这里按照格式加下去，比如 "photo4.jpg"
+        var photos = ["photo1.jpg", "photo2.jpg", "photo3.jpg"]; 
+        var currentIndex = 0;
+        var imgElement = document.getElementById("slide-photo");
+
+        // 每隔 3500 毫秒 (3.5秒) 运行一次切换动画
+        setInterval(function() {
+            // 1. 让当前照片变透明（淡出）
+            imgElement.style.opacity = 0;
+            
+            // 2. 等待 800 毫秒（也就是 CSS 里设置的过渡时间）后换图
+            setTimeout(function() {
+                currentIndex = (currentIndex + 1) % photos.length; // 计算下一张图的序号
+                imgElement.src = photos[currentIndex]; // 更换图片地址
+                imgElement.style.opacity = 1; // 换好后，让新照片显现（淡入）
+            }, 800);
+        }, 3500); 
     </script>
 
 </body>
