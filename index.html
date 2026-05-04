@@ -223,12 +223,22 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: none;
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 1;
     }
 
     .photo-label {
-      position: relative;
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
       z-index: 2;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.36);
+      backdrop-filter: blur(8px);
       font-size: 30px;
       font-weight: 700;
       letter-spacing: 3px;
@@ -305,10 +315,19 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: none;
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 1;
     }
 
     .grid-item span {
+      position: relative;
+      z-index: 2;
+      padding: 7px 13px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.36);
+      backdrop-filter: blur(8px);
       font-size: 24px;
       font-weight: 700;
       letter-spacing: 2px;
@@ -385,10 +404,19 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: none;
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 1;
     }
 
     .modal-card span {
+      position: relative;
+      z-index: 2;
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.38);
+      backdrop-filter: blur(8px);
       font-size: clamp(36px, 8vw, 72px);
       font-weight: 800;
       letter-spacing: 5px;
@@ -479,27 +507,27 @@
       <h2 class="carousel-title">3D 炫酷旋转相册</h2>
       <div class="scene">
         <div class="carousel" id="carousel">
-          <div class="photo-card" data-name="照片1"><span class="photo-label">照片1</span></div>
-          <div class="photo-card" data-name="照片2"><span class="photo-label">照片2</span></div>
-          <div class="photo-card" data-name="照片3"><span class="photo-label">照片3</span></div>
-          <div class="photo-card" data-name="照片4"><span class="photo-label">照片4</span></div>
-          <div class="photo-card" data-name="照片5"><span class="photo-label">照片5</span></div>
-          <div class="photo-card" data-name="照片6"><span class="photo-label">照片6</span></div>
-          <div class="photo-card" data-name="照片7"><span class="photo-label">照片7</span></div>
-          <div class="photo-card" data-name="照片8"><span class="photo-label">照片8</span></div>
+          <div class="photo-card" data-name="照片1" data-img="photo1.jpg"><img src="photo1.jpg" alt="照片1"><span class="photo-label">照片1</span></div>
+          <div class="photo-card" data-name="照片2" data-img="photo2.jpg"><img src="photo2.jpg" alt="照片2"><span class="photo-label">照片2</span></div>
+          <div class="photo-card" data-name="照片3" data-img="photo3.jpg"><img src="photo3.jpg" alt="照片3"><span class="photo-label">照片3</span></div>
+          <div class="photo-card" data-name="照片4" data-img="photo4.jpg"><img src="photo4.jpg" alt="照片4"><span class="photo-label">照片4</span></div>
+          <div class="photo-card" data-name="照片5" data-img="photo5.jpg"><img src="photo5.jpg" alt="照片5"><span class="photo-label">照片5</span></div>
+          <div class="photo-card" data-name="照片6" data-img="photo6.jpg"><img src="photo6.jpg" alt="照片6"><span class="photo-label">照片6</span></div>
+          <div class="photo-card" data-name="照片7" data-img="photo7.jpg"><img src="photo7.jpg" alt="照片7"><span class="photo-label">照片7</span></div>
+          <div class="photo-card" data-name="照片8" data-img="photo8.jpg"><img src="photo8.jpg" alt="照片8"><span class="photo-label">照片8</span></div>
         </div>
       </div>
     </section>
 
     <section class="grid-section" aria-label="照片墙">
-      <div class="grid-item" data-name="照片1"><span>照片1</span></div>
-      <div class="grid-item" data-name="照片2"><span>照片2</span></div>
-      <div class="grid-item" data-name="照片3"><span>照片3</span></div>
-      <div class="grid-item" data-name="照片4"><span>照片4</span></div>
-      <div class="grid-item" data-name="照片5"><span>照片5</span></div>
-      <div class="grid-item" data-name="照片6"><span>照片6</span></div>
-      <div class="grid-item" data-name="照片7"><span>照片7</span></div>
-      <div class="grid-item" data-name="照片8"><span>照片8</span></div>
+      <div class="grid-item" data-name="照片1" data-img="photo1.jpg"><img src="photo1.jpg" alt="照片1"><span>照片1</span></div>
+      <div class="grid-item" data-name="照片2" data-img="photo2.jpg"><img src="photo2.jpg" alt="照片2"><span>照片2</span></div>
+      <div class="grid-item" data-name="照片3" data-img="photo3.jpg"><img src="photo3.jpg" alt="照片3"><span>照片3</span></div>
+      <div class="grid-item" data-name="照片4" data-img="photo4.jpg"><img src="photo4.jpg" alt="照片4"><span>照片4</span></div>
+      <div class="grid-item" data-name="照片5" data-img="photo5.jpg"><img src="photo5.jpg" alt="照片5"><span>照片5</span></div>
+      <div class="grid-item" data-name="照片6" data-img="photo6.jpg"><img src="photo6.jpg" alt="照片6"><span>照片6</span></div>
+      <div class="grid-item" data-name="照片7" data-img="photo7.jpg"><img src="photo7.jpg" alt="照片7"><span>照片7</span></div>
+      <div class="grid-item" data-name="照片8" data-img="photo8.jpg"><img src="photo8.jpg" alt="照片8"><span>照片8</span></div>
     </section>
 
     <section class="love-line">
@@ -513,6 +541,7 @@
   <div class="modal" id="modal">
     <div class="modal-card">
       <button class="close" id="closeBtn">×</button>
+      <img id="modalImg" src="photo1.jpg" alt="照片预览">
       <span id="modalText">照片1</span>
     </div>
   </div>
@@ -524,6 +553,7 @@
     const hearts = document.getElementById('hearts');
     const modal = document.getElementById('modal');
     const modalText = document.getElementById('modalText');
+    const modalImg = document.getElementById('modalImg');
     const closeBtn = document.getElementById('closeBtn');
 
     pauseBtn.addEventListener('click', () => {
@@ -553,6 +583,8 @@
     document.querySelectorAll('[data-name]').forEach(item => {
       item.addEventListener('click', () => {
         modalText.textContent = item.dataset.name;
+        modalImg.src = item.dataset.img;
+        modalImg.alt = item.dataset.name;
         modal.classList.add('active');
       });
     });
