@@ -1,841 +1,203 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>炫酷照片展示页</title>
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --bg1: #090b1f;
-      --bg2: #17173d;
-      --pink: #ff4fd8;
-      --blue: #3de7ff;
-      --purple: #8b5cf6;
-      --white: rgba(255, 255, 255, 0.92);
-      --soft: rgba(255, 255, 255, 0.12);
-    }
-
-    body {
-      min-height: 100vh;
-      overflow-x: hidden;
-      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
-      color: var(--white);
-      background:
-        radial-gradient(circle at 20% 20%, rgba(255, 79, 216, 0.24), transparent 30%),
-        radial-gradient(circle at 80% 10%, rgba(61, 231, 255, 0.2), transparent 30%),
-        radial-gradient(circle at 50% 90%, rgba(139, 92, 246, 0.28), transparent 36%),
-        linear-gradient(135deg, var(--bg1), var(--bg2));
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image:
-        radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px),
-        radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px);
-      background-size: 60px 60px, 110px 110px;
-      background-position: 0 0, 30px 40px;
-      opacity: 0.25;
-      animation: starMove 24s linear infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    @keyframes starMove {
-      from {
-        transform: translateY(0);
-      }
-      to {
-        transform: translateY(-120px);
-      }
-    }
-
-    .page {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      padding: 42px 18px 70px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .hero {
-      width: min(980px, 100%);
-      text-align: center;
-      padding: 26px 18px 18px;
-      animation: fadeDown 1s ease both;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 0 28px rgba(61, 231, 255, 0.18);
-      font-size: 14px;
-      letter-spacing: 1px;
-    }
-
-    h1 {
-      margin-top: 22px;
-      font-size: clamp(34px, 7vw, 78px);
-      line-height: 1.05;
-      letter-spacing: 3px;
-      background: linear-gradient(90deg, #fff, #ffb7ef, #8ff4ff, #fff);
-      background-size: 240% auto;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: shine 5s linear infinite;
-      text-shadow: 0 0 34px rgba(255, 79, 216, 0.2);
-    }
-
-    .subtitle {
-      margin: 18px auto 0;
-      max-width: 680px;
-      color: rgba(255,255,255,0.72);
-      font-size: clamp(15px, 2.8vw, 19px);
-      line-height: 1.8;
-    }
-
-    @keyframes shine {
-      to {
-        background-position: 240% center;
-      }
-    }
-
-    @keyframes fadeDown {
-      from {
-        opacity: 0;
-        transform: translateY(-24px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .controls {
-      margin-top: 22px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .btn {
-      border: 0;
-      cursor: pointer;
-      color: #fff;
-      padding: 12px 18px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, rgba(255,79,216,0.85), rgba(61,231,255,0.8));
-      box-shadow: 0 12px 32px rgba(0,0,0,0.28), 0 0 24px rgba(255,79,216,0.25);
-      letter-spacing: 1px;
-      transition: 0.25s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 18px 44px rgba(0,0,0,0.36), 0 0 38px rgba(61,231,255,0.35);
-    }
-
-    .stage-wrap {
-      width: min(980px, 100%);
-      margin-top: 34px;
-      padding: 34px 12px 42px;
-      border-radius: 34px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
-      border: 1px solid rgba(255,255,255,0.16);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 28px 90px rgba(0,0,0,0.34);
-      overflow: hidden;
-      animation: fadeUp 1s 0.2s ease both;
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .carousel-title {
-      text-align: center;
-      margin-bottom: 22px;
-      font-size: clamp(20px, 4vw, 32px);
-      letter-spacing: 2px;
-    }
-
-    .scene {
-      width: 100%;
-      height: 420px;
-      perspective: 1300px;
-      position: relative;
-      display: grid;
-      place-items: center;
-    }
-
-    .carousel {
-      position: relative;
-      width: 210px;
-      height: 280px;
-      transform-style: preserve-3d;
-      animation: rotateAlbum 26s linear infinite;
-    }
-
-    .carousel.paused {
-      animation-play-state: paused;
-    }
-
-    @keyframes rotateAlbum {
-      from {
-        transform: rotateY(0deg) rotateX(-5deg);
-      }
-      to {
-        transform: rotateY(360deg) rotateX(-5deg);
-      }
-    }
-
-    .photo-card {
-      position: absolute;
-      inset: 0;
-      border-radius: 24px;
-      overflow: hidden;
-      display: grid;
-      place-items: center;
-      background:
-        linear-gradient(145deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06)),
-        radial-gradient(circle at 35% 25%, rgba(255,255,255,0.32), transparent 24%),
-        linear-gradient(135deg, rgba(255,79,216,0.65), rgba(61,231,255,0.55));
-      border: 1px solid rgba(255,255,255,0.28);
-      box-shadow:
-        0 18px 48px rgba(0,0,0,0.38),
-        inset 0 0 30px rgba(255,255,255,0.12),
-        0 0 26px rgba(255,79,216,0.22);
-      cursor: pointer;
-      transition: box-shadow 0.3s ease;
-      user-select: none;
-    }
-
-    .photo-card:hover {
-      box-shadow:
-        0 24px 58px rgba(0,0,0,0.42),
-        0 0 38px rgba(61,231,255,0.42);
-    }
-
-    .photo-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-    }
-
-    .photo-label {
-      position: absolute;
-      left: 50%;
-      bottom: 18px;
-      transform: translateX(-50%);
-      z-index: 3;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.36);
-      backdrop-filter: blur(8px);
-      font-size: 30px;
-      font-weight: 700;
-      letter-spacing: 3px;
-      text-shadow: 0 4px 18px rgba(0,0,0,0.36);
-      white-space: nowrap;
-    }
-
-    .photo-card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.28) 45%, transparent 70%);
-      transform: translateX(-130%);
-      animation: glass 4.2s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    @keyframes glass {
-      0%, 40% {
-        transform: translateX(-130%);
-      }
-      70%, 100% {
-        transform: translateX(130%);
-      }
-    }
-
-    .photo-card:nth-child(1) {
-      transform: rotateY(0deg) translateZ(360px);
-    }
-
-    .photo-card:nth-child(2) {
-      transform: rotateY(45deg) translateZ(360px);
-    }
-
-    .photo-card:nth-child(3) {
-      transform: rotateY(90deg) translateZ(360px);
-    }
-
-    .photo-card:nth-child(4) {
-      transform: rotateY(135deg) translateZ(360px);
-    }
-
-    .photo-card:nth-child(5) {
-      transform: rotateY(180deg) translateZ(360px);
-    }
-
-    .photo-card:nth-child(6) {
-      transform: rotateY(225deg) translateZ(360px);
-    }
-
-    .photo-card:nth-child(7) {
-      transform: rotateY(270deg) translateZ(360px);
-    }
-
-    .photo-card:nth-child(8) {
-      transform: rotateY(315deg) translateZ(360px);
-    }
-
-    .grid-section {
-      width: min(980px, 100%);
-      margin-top: 28px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-
-    .grid-item {
-      min-height: 170px;
-      border-radius: 24px;
-      position: relative;
-      overflow: hidden;
-      background:
-        linear-gradient(145deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06)),
-        linear-gradient(135deg, rgba(139,92,246,0.72), rgba(61,231,255,0.42));
-      border: 1px solid rgba(255,255,255,0.18);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.25);
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      transition: 0.28s ease;
-      animation: floatIn 0.8s ease both;
-    }
-
-    .grid-item:nth-child(2) {
-      animation-delay: 0.08s;
-    }
-
-    .grid-item:nth-child(3) {
-      animation-delay: 0.16s;
-    }
-
-    .grid-item:nth-child(4) {
-      animation-delay: 0.24s;
-    }
-
-    .grid-item:nth-child(5) {
-      animation-delay: 0.32s;
-    }
-
-    .grid-item:nth-child(6) {
-      animation-delay: 0.40s;
-    }
-
-    .grid-item:nth-child(7) {
-      animation-delay: 0.48s;
-    }
-
-    .grid-item:nth-child(8) {
-      animation-delay: 0.56s;
-    }
-
-    @keyframes floatIn {
-      from {
-        opacity: 0;
-        transform: translateY(28px) scale(0.92);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    .grid-item:hover {
-      transform: translateY(-8px) scale(1.03);
-      box-shadow: 0 24px 58px rgba(0,0,0,0.34), 0 0 28px rgba(255,79,216,0.24);
-    }
-
-    .grid-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-    }
-
-    .grid-item span {
-      position: relative;
-      z-index: 2;
-      padding: 7px 13px;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.36);
-      backdrop-filter: blur(8px);
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      white-space: nowrap;
-    }
-
-    .love-line {
-      width: min(820px, 100%);
-      margin: 34px auto 0;
-      text-align: center;
-      padding: 22px 18px;
-      border-radius: 28px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: rgba(255,255,255,0.82);
-      line-height: 1.9;
-      letter-spacing: 1px;
-    }
-
-    .hearts {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 3;
-    }
-
-    .heart {
-      position: absolute;
-      bottom: -40px;
-      color: rgba(255, 111, 216, 0.86);
-      animation: rise linear forwards;
-      text-shadow: 0 0 14px rgba(255,79,216,0.42);
-    }
-
-    @keyframes rise {
-      to {
-        transform: translateY(-110vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      z-index: 10;
-      display: none;
-      place-items: center;
-      background: rgba(0,0,0,0.68);
-      backdrop-filter: blur(12px);
-      padding: 24px;
-    }
-
-    .modal.active {
-      display: grid;
-    }
-
-    .modal-card {
-      width: min(520px, 92vw);
-      height: min(680px, 78vh);
-      border-radius: 34px;
-      display: grid;
-      place-items: center;
-      position: relative;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 35% 20%, rgba(255,255,255,0.28), transparent 30%),
-        linear-gradient(135deg, rgba(255,79,216,0.82), rgba(61,231,255,0.68));
-      border: 1px solid rgba(255,255,255,0.26);
-      box-shadow: 0 30px 90px rgba(0,0,0,0.55), 0 0 60px rgba(255,79,216,0.26);
-      animation: zoomIn 0.28s ease both;
-    }
-
-    .modal-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-    }
-
-    .modal-card span {
-      position: relative;
-      z-index: 2;
-      padding: 10px 20px;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.38);
-      backdrop-filter: blur(8px);
-      font-size: clamp(28px, 6vw, 52px);
-      font-weight: 800;
-      letter-spacing: 5px;
-      text-shadow: 0 8px 26px rgba(0,0,0,0.36);
-      white-space: nowrap;
-    }
-
-    @keyframes zoomIn {
-      from {
-        opacity: 0;
-        transform: scale(0.86);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .close {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.28);
-      color: #fff;
-      background: rgba(0,0,0,0.36);
-      cursor: pointer;
-      font-size: 22px;
-      z-index: 3;
-    }
-
-    .footer {
-      margin-top: 34px;
-      color: rgba(255,255,255,0.55);
-      font-size: 13px;
-      text-align: center;
-    }
-
-    @media (max-width: 900px) {
-      .scene {
-        height: 360px;
-      }
-
-      .carousel {
-        width: 170px;
-        height: 230px;
-      }
-
-      .photo-card:nth-child(1) {
-        transform: rotateY(0deg) translateZ(270px);
-      }
-
-      .photo-card:nth-child(2) {
-        transform: rotateY(45deg) translateZ(270px);
-      }
-
-      .photo-card:nth-child(3) {
-        transform: rotateY(90deg) translateZ(270px);
-      }
-
-      .photo-card:nth-child(4) {
-        transform: rotateY(135deg) translateZ(270px);
-      }
-
-      .photo-card:nth-child(5) {
-        transform: rotateY(180deg) translateZ(270px);
-      }
-
-      .photo-card:nth-child(6) {
-        transform: rotateY(225deg) translateZ(270px);
-      }
-
-      .photo-card:nth-child(7) {
-        transform: rotateY(270deg) translateZ(270px);
-      }
-
-      .photo-card:nth-child(8) {
-        transform: rotateY(315deg) translateZ(270px);
-      }
-
-      .grid-section {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 520px) {
-      .page {
-        padding-top: 24px;
-      }
-
-      .stage-wrap {
-        border-radius: 26px;
-        padding-top: 24px;
-      }
-
-      .scene {
-        height: 310px;
-      }
-
-      .carousel {
-        width: 136px;
-        height: 190px;
-      }
-
-      .photo-label {
-        font-size: 20px;
-        bottom: 12px;
-      }
-
-      .photo-card:nth-child(1) {
-        transform: rotateY(0deg) translateZ(205px);
-      }
-
-      .photo-card:nth-child(2) {
-        transform: rotateY(45deg) translateZ(205px);
-      }
-
-      .photo-card:nth-child(3) {
-        transform: rotateY(90deg) translateZ(205px);
-      }
-
-      .photo-card:nth-child(4) {
-        transform: rotateY(135deg) translateZ(205px);
-      }
-
-      .photo-card:nth-child(5) {
-        transform: rotateY(180deg) translateZ(205px);
-      }
-
-      .photo-card:nth-child(6) {
-        transform: rotateY(225deg) translateZ(205px);
-      }
-
-      .photo-card:nth-child(7) {
-        transform: rotateY(270deg) translateZ(205px);
-      }
-
-      .photo-card:nth-child(8) {
-        transform: rotateY(315deg) translateZ(205px);
-      }
-
-      .grid-section {
-        gap: 12px;
-      }
-
-      .grid-item {
-        min-height: 135px;
-        border-radius: 20px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赵苏淇三周岁生日邀请函 🎈</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fff5f5;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 40px 25px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 182, 193, 0.3);
+            max-width: 450px;
+            width: 90%;
+            margin: 20px;
+            animation: slideUp 1.2s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '🎈';
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #ff6b6b;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #f7a072;
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .photo-frame {
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            background-color: #fff0f0; /* 图片切换时的底色 */
+        }
+
+        .photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* 保留了呼吸动画，同时增加了透明度渐变效果 */
+            animation: breathe 4s infinite ease-in-out;
+            transition: opacity 0.8s ease-in-out; 
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .poem {
+            color: #884d4d;
+            font-size: 15px;
+            line-height: 1.8;
+            margin: 20px 0;
+            padding: 15px;
+            background: #fffafa;
+            border-radius: 15px;
+            border-left: 4px solid #ffb6b9;
+        }
+
+        .info-box {
+            text-align: left;
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #555;
+            font-size: 15px;
+            line-height: 2;
+        }
+
+        .info-item b {
+            color: #ff6b6b;
+            margin-right: 8px;
+        }
+
+        #music-btn {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        #music-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
 </head>
-
 <body>
-  <div class="hearts" id="hearts"></div>
 
-  <main class="page">
-    <section class="hero">
-      <div class="tag">✨ Special Gallery · Love Memory</div>
-      <h1>我们的高光瞬间</h1>
-      <p class="subtitle">把每一张照片，都放进闪耀的星河里。愿这一页，记录专属于你们的浪漫与心动。</p>
-
-      <div class="controls">
-        <button class="btn" id="pauseBtn">暂停 / 继续旋转</button>
-        <button class="btn" id="heartBtn">点击撒爱心</button>
-      </div>
-    </section>
-
-    <section class="stage-wrap">
-      <h2 class="carousel-title">3D 炫酷旋转相册</h2>
-
-      <div class="scene">
-        <div class="carousel" id="carousel">
-          <div class="photo-card" data-name="照片1" data-img="photo1.jpg">
-            <img src="photo1.jpg" alt="照片1">
-            <span class="photo-label">照片1</span>
-          </div>
-
-          <div class="photo-card" data-name="照片2" data-img="photo2.jpg">
-            <img src="photo2.jpg" alt="照片2">
-            <span class="photo-label">照片2</span>
-          </div>
-
-          <div class="photo-card" data-name="照片3" data-img="photo3.jpg">
-            <img src="photo3.jpg" alt="照片3">
-            <span class="photo-label">照片3</span>
-          </div>
-
-          <div class="photo-card" data-name="照片4" data-img="photo4.jpg">
-            <img src="photo4.jpg" alt="照片4">
-            <span class="photo-label">照片4</span>
-          </div>
-
-          <div class="photo-card" data-name="照片5" data-img="photo5.jpg">
-            <img src="photo5.jpg" alt="照片5">
-            <span class="photo-label">照片5</span>
-          </div>
-
-          <div class="photo-card" data-name="照片6" data-img="photo6.jpg">
-            <img src="photo6.jpg" alt="照片6">
-            <span class="photo-label">照片6</span>
-          </div>
-
-          <div class="photo-card" data-name="照片7" data-img="photo7.jpg">
-            <img src="photo7.jpg" alt="照片7">
-            <span class="photo-label">照片7</span>
-          </div>
-
-          <div class="photo-card" data-name="照片8" data-img="photo8.jpg">
-            <img src="photo8.jpg" alt="照片8">
-            <span class="photo-label">照片8</span>
-          </div>
+    <div class="container">
+        <h1>✨ 宝贝三周岁生日邀请 ✨</h1>
+        <div class="subtitle">三岁一程 · 岁岁欢喜</div>
+        
+        <div class="photo-frame">
+            <img src="photo1.jpg" alt="赵苏淇的照片" class="photo" id="slide-photo">
         </div>
-      </div>
-    </section>
+        
+        <div class="poem">
+            家有小女，喜迎三周岁生辰<br>
+            感恩一路相伴，承蒙万般宠爱<br>
+            备薄宴，邀亲友<br>
+            共赴一场温暖的生日之约<br>
+            见证成长，岁岁安康。
+        </div>
 
-    <section class="grid-section" aria-label="照片墙">
-      <div class="grid-item" data-name="照片1" data-img="photo1.jpg">
-        <img src="photo1.jpg" alt="照片1">
-        <span>照片1</span>
-      </div>
+        <div class="info-box">
+            <div class="info-item"><b>主角：</b> 赵苏淇</div>
+            <div class="info-item"><b>时间：</b> 2026年5月6日 (农历三月二十)</div>
+            <div class="info-item"><b>地点：</b> 壶关碧水云天大酒店二楼宴会厅</div>
+            <div class="info-item"><b>举办人：</b> 赵世飞、李志娟</div>
+        </div>
 
-      <div class="grid-item" data-name="照片2" data-img="photo2.jpg">
-        <img src="photo2.jpg" alt="照片2">
-        <span>照片2</span>
-      </div>
-
-      <div class="grid-item" data-name="照片3" data-img="photo3.jpg">
-        <img src="photo3.jpg" alt="照片3">
-        <span>照片3</span>
-      </div>
-
-      <div class="grid-item" data-name="照片4" data-img="photo4.jpg">
-        <img src="photo4.jpg" alt="照片4">
-        <span>照片4</span>
-      </div>
-
-      <div class="grid-item" data-name="照片5" data-img="photo5.jpg">
-        <img src="photo5.jpg" alt="照片5">
-        <span>照片5</span>
-      </div>
-
-      <div class="grid-item" data-name="照片6" data-img="photo6.jpg">
-        <img src="photo6.jpg" alt="照片6">
-        <span>照片6</span>
-      </div>
-
-      <div class="grid-item" data-name="照片7" data-img="photo7.jpg">
-        <img src="photo7.jpg" alt="照片7">
-        <span>照片7</span>
-      </div>
-
-      <div class="grid-item" data-name="照片8" data-img="photo8.jpg">
-        <img src="photo8.jpg" alt="照片8">
-        <span>照片8</span>
-      </div>
-    </section>
-
-    <section class="love-line">
-      所有浪漫，都藏在一起走过的日子里。<br />
-      愿未来的每一次回头，都能看见这一刻的光。
-    </section>
-
-    <div class="footer">Made with Love · 点击照片可放大预览</div>
-  </main>
-
-  <div class="modal" id="modal">
-    <div class="modal-card">
-      <button class="close" id="closeBtn">×</button>
-      <img id="modalImg" src="photo1.jpg" alt="照片预览">
-      <span id="modalText">照片1</span>
+        <audio id="bgMusic" loop>
+            <source src="music.mp3" type="audio/mpeg">
+        </audio>
+        
+        <br>
+        <button id="music-btn" onclick="toggleMusic()">🎵 点击开启音乐与温馨邀请</button>
     </div>
-  </div>
 
-  <script>
-    const carousel = document.getElementById('carousel');
-    const pauseBtn = document.getElementById('pauseBtn');
-    const heartBtn = document.getElementById('heartBtn');
-    const hearts = document.getElementById('hearts');
-    const modal = document.getElementById('modal');
-    const modalText = document.getElementById('modalText');
-    const modalImg = document.getElementById('modalImg');
-    const closeBtn = document.getElementById('closeBtn');
+    <script>
+        // --- 音乐控制代码 ---
+        var myMusic = document.getElementById("bgMusic");
+        var btn = document.getElementById("music-btn");
+        var isPlaying = false;
 
-    pauseBtn.addEventListener('click', () => {
-      carousel.classList.toggle('paused');
-    });
+        function toggleMusic() {
+            if (isPlaying) {
+                myMusic.pause();
+                btn.innerHTML = "🎵 音乐已暂停 (点击播放)";
+            } else {
+                myMusic.play();
+                btn.innerHTML = "🎶 音乐播放中 (点击暂停)";
+            }
+            isPlaying = !isPlaying;
+        }
 
-    function createHeart() {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.textContent = Math.random() > 0.5 ? '❤' : '♡';
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.fontSize = Math.random() * 22 + 16 + 'px';
-      heart.style.animationDuration = Math.random() * 2.6 + 3.2 + 's';
-      heart.style.opacity = Math.random() * 0.45 + 0.45;
-      hearts.appendChild(heart);
+        // --- 照片自动轮播代码 ---
+        // 如果你有更多照片，只需要在这里按照格式加下去，比如 "photo4.jpg"
+        var photos = ["photo1.jpg", "photo2.jpg", "photo3.jpg"]; 
+        var currentIndex = 0;
+        var imgElement = document.getElementById("slide-photo");
 
-      setTimeout(() => {
-        heart.remove();
-      }, 6500);
-    }
+        // 每隔 3500 毫秒 (3.5秒) 运行一次切换动画
+        setInterval(function() {
+            // 1. 让当前照片变透明（淡出）
+            imgElement.style.opacity = 0;
+            
+            // 2. 等待 800 毫秒（也就是 CSS 里设置的过渡时间）后换图
+            setTimeout(function() {
+                currentIndex = (currentIndex + 1) % photos.length; // 计算下一张图的序号
+                imgElement.src = photos[currentIndex]; // 更换图片地址
+                imgElement.style.opacity = 1; // 换好后，让新照片显现（淡入）
+            }, 800);
+        }, 3500); 
+    </script>
 
-    heartBtn.addEventListener('click', () => {
-      for (let i = 0; i < 28; i++) {
-        setTimeout(createHeart, i * 55);
-      }
-    });
-
-    setInterval(createHeart, 900);
-
-    document.querySelectorAll('[data-name]').forEach(item => {
-      item.addEventListener('click', () => {
-        const name = item.dataset.name;
-        const img = item.dataset.img;
-
-        modalText.textContent = name;
-        modalImg.src = img;
-        modalImg.alt = name;
-        modal.classList.add('active');
-      });
-    });
-
-    closeBtn.addEventListener('click', () => {
-      modal.classList.remove('active');
-    });
-
-    modal.addEventListener('click', event => {
-      if (event.target === modal) {
-        modal.classList.remove('active');
-      }
-    });
-
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape') {
-        modal.classList.remove('active');
-      }
-    });
-  </script>
 </body>
 </html>
